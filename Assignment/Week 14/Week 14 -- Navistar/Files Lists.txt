@@ -1,0 +1,11 @@
+1. Week 14 R codes -- Navistar.docx (codes and results in R, word version)
+2. Week 14 codes-Navista.R (R version)
+3. qa_Navistar.csv (matrix file)
+4. frequencies50.csv (terms used 50 or more times)
+5. frequencies100.csv (terms used 100 or more times)
+6. Frequent Words.png (plot img for terms used 200 or more times)
+7. Word Cloud.png (img for terms used 100 or more times)
+8. raw files which have qa sections (Navistar2015.htm ~ Navistar2008.htm)
+
+
+

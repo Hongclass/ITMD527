@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?><Task schemaVersion="4.0">
+   <Registration>
+      <Name>Characterize Data</Name>
+      <Description>The Characterize Data task creates summary report, graphs, and frequency and univariate SAS data sets that describe the main characteristics of the data.</Description>
+      <GUID>54CB49F5-0888-4853-9DB6-43C50AED3982</GUID>
+      <Procedures>FREQ, MEANS, SQL, UNIVARIATE </Procedures>
+      <Links>
+         <Link href="http://support.sas.com/documentation/onlinedoc/sasstudio/index.html">SAS Studio User's Guide</Link>
+         <Link href=""> </Link>
+         <Link href=""> </Link>
+         <Link href="http://support.sas.com/documentation/cdl/en/statug/66859/HTML/default/viewer.htm#statug_freq_toc.htm">The FREQ Procedure</Link>
+         <Link href=""> </Link>
+         <Link href=""> </Link>
+         <Link href="http://support.sas.com/documentation/cdl/en/proc/67327/HTML/default/viewer.htm#p0f0fjpjeuco4gn1ri963f683mi4.htm">The MEANS Procedure</Link>
+         <Link href=""> </Link>
+         <Link href=""> </Link>
+         <Link href="http://support.sas.com/documentation/cdl/en/sqlproc/65065/HTML/default/viewer.htm#n1oihmdy7om5rmn1aorxui3kxizl.htm">The SQL Procedure</Link>
+         <Link href=""> </Link>
+         <Link href=""> </Link>
+         <Link href="http://support.sas.com/documentation/cdl/en/procstat/66703/HTML/default/viewer.htm#procstat_univariate_syntax.htm">The UNIVARIATE Procedure</Link>
+         <Link href=""> </Link>
+         <Link href=""> </Link>         
+         <Link href="http://support.sas.com/training/studio">SAS Tutorials</Link>      
+      </Links>
+      <Version>3.4</Version>
+   </Registration>
+
+   <Metadata>
+      <DataSources>
+         <DataSource name="dataset">
+            <Roles>
+               <Role exclude="categoryVars,byVar,dateVars" maxVars="0" minVars="0" name="analysisVars" type="A">Variables:</Role>
+               <Role exclude="analysisVars,byVar,,dateVars" maxVars="0" minVars="0" name="categoryVars" type="A">Categorical variables:</Role>
+               <Role exclude="categroyVars,analysisVars,,dateVars" maxVars="1" minVars="0" name="byVar" type="A">Grouping variable:</Role>
+               <Role exclude="analysisVars,categoryVars,byVar" maxVars="0" minVars="0" name="dateVars" type="N">Date variables:</Role>               
+            </Roles>
+         </DataSource>
+      </DataSources>
+      
+      <Options>
+         <Option inputType="string" name="datatab">DATA</Option>        
+         <Option inputType="string" name="datagrp">DATA</Option>
+         <Option inputType="string" name="autogrp">AUTOMATIC CHARACTERIZATION</Option>
+         <Option inputType="string" name="customgrp">CUSTOM CHARACTERIZATION</Option>
+         <Option inputType="string" name="rolesgrp">ROLES</Option>
+         <Option inputType="string" name="optionstab">OPTIONS</Option>
+         <Option inputType="string" name="chargrp">CATEGORICAL VARIABLES</Option>
+         <Option defaultValue="1" inputType="checkbox" name="freqTable">Frequency table</Option>
+         <Option defaultValue="1" inputType="checkbox" name="freqChart">Frequency chart</Option>
+         <Option defaultValue="0" inputType="checkbox" name="levelsTable">Number of levels table</Option>
+         <Option defaultValue="0" inputType="checkbox" name="keepMissing">Treat missing values as valid level</Option>
+         <Option defaultValue="0" inputType="checkbox" name="limitchk">Limit categorical values</Option>
+         <Option decimalPlaces="0" defaultValue="30" inputType="numstepper" invalidMessage="Enter an integer value greater than 0 and less than 100" maxValue="99" minValue="1" missingMessage="Enter an integer value greater than 0 and less than 100" name="limit" promptMessage="Enter an integer value greater than 0 and less than 100" rangeMessage="Enter an integer value greater than 0 and less than 100" rangeMessageKey="limitRangeKey" required="true" width="50px">Maximum number of unique values:</Option>
+         <Option inputType="string" name="numgrp">NUMERIC VARIABLES</Option>         
+         <Option defaultValue="1" inputType="checkbox" name="statTable">Descriptive statistics</Option>
+         <Option defaultValue="1" inputType="checkbox" name="histogram">Histogram</Option>
+         <Option inputType="string" name="dategrp">DATE VARIABLES</Option>
+         <Option defaultValue="1" inputType="checkbox" name="minMaxDate" nlskey="minMaxDateKey">Display minimum and maximum date</Option>
+         <Option defaultValue="0" inputType="checkbox" name="seriesPlot" nlskey="seriesPlotKey">Frequency plot</Option>
+
+         <!-- The following options do not appear in the UI. -->
+         <Option inputType="string" name="catTableTitle">Frequencies for Categorical Variables</Option>
+         <Option inputType="string" name="numTableTitle">Descriptive Statistics for Numeric Variables</Option>
+         <Option inputType="string" name="dateTableTitle">Minimum and Maximum Dates</Option>
+         <Option inputType="string" name="datePlotTitle">Date Frequencies</Option>
+      </Options>
+   </Metadata>
+
+   <UI>
+   <Container option="datatab">
+      <Group open="true" option="datagrp">
+         <DataItem data="dataset"/>
+      </Group>
+
+      <Group open="true" option="autogrp">
+         <RoleItem role="analysisVars"/>
+      </Group>
+      
+      <Group option="customgrp">
+         <RoleItem role="categoryVars"/>  
+         <RoleItem role="dateVars"/>
+      </Group>
+      
+      <Group option="rolesgrp">
+         <RoleItem role="byVar"/>  
+      </Group>
+   </Container>
+   
+   <Container option="optionstab">
+      <Group open="true" option="chargrp">
+         <OptionItem option="freqTable"/>
+         <OptionItem option="freqChart"/>
+         <OptionItem option="keepMissing"/>
+         <OptionItem option="limitchk"/>
+         <OptionItem option="limit"/>
+      </Group>
+      <Group open="true" option="numgrp">
+         <OptionItem option="statTable"/>
+         <OptionItem option="histogram"/> 
+      </Group>
+      <Group option="dategrp">
+         <OptionItem option="minMaxDate"/>
+         <OptionItem option="seriesPlot"/>
+      </Group>
+   </Container>
+
+  
+   </UI>
+
+   <Dependencies>
+      <Dependency condition="($limitchk == 1)">
+         <Target action="show" conditionResult="true" option="limit"/>
+         <Target action="hide" conditionResult="false" option="limit"/>
+      </Dependency>
+
+   </Dependencies>
+   
+   <Requirements>
+      <Requirement condition="$analysisVars.size() &gt; 0 || $categoryVars.size() &gt; 0 || $dateVars.size() &gt; 0">
+         <Message nlsKey="characterizeVariableRequirementKey"> Select at least one variable to characterize.</Message>
+      </Requirement>
+   </Requirements>
+
+   <CodeTemplate>
+<![CDATA[
+ods noproctitle;
+#set($numChar = 0)
+#set($numNum = 0)
+#set($numDate = 0)
+#set($charList = [])
+#set($numList = [])
+#set($dateList = [])
+#set($dateFmts = ["B8601DA", "DATE", "DAY", "DDMMYY", "DDMMYYB", "DDMMYYC", 
+      "DDMMYYD", "DDMMYYN", "DDMMYYP", "DDMMYYS", "DOWNAME", "E8601DA", "EURDFDD", 
+      "EURDFDE", "EURDFDN", "EURDFDWN", "EURDFMN", "EURDFMY", "EURDFWDX", 
+      "EURDFWKX", "HDATE", "HEBDATE", "JULDAY", "JULIAN", "MINGUO", "MMDDYY", 
+      "MMDDYYB", "MMDDYYC", "MMDDYYD", "MMDDYYN", "MMDDYYP", "MMDDYYS", "MMYY", 
+      "MMYYC", "MMYYD", "MMYYN", "MMYYP", "MMYYS", "MONNAME", "MONTH", "MONYY", 
+      "NENGO", "NLDATE", "NLDATEMN", "NLDATEW", "NLDATWN", "QTR", "QTRR", 
+      "WEEKDATE", "WEEKDATX", "WEEKDAY", "WEEKU", "WEEKV", "WEEKW", "WORDDATE", 
+      "WORDDATX", "YEAR", "YYMM", "YYMMC", "YYMMD", "YYMMDD", "YYMMDDB", "YYMMDDC", 
+      "YYMMDDD", "YYMMDDN", "YYMMDDP", "YYMMDDS", "YYMMN", "YYMMP", "YYMMS", 
+      "YYMON", "YYQ", "YYQC", "YYQD", "YYQN", "YYQP", "YYQR", "YYQRC", "YYQRD", 
+      "YYQRN", "YYQRP", "YYQRS", "YYQS"])
+
+
+#foreach($item in $analysisVars)
+   #if($item.get('type') == 'Char')
+      #set($tmp = $charList.add($item))
+      #set($numChar = $numChar + 1)
+   #end
+   #if($item.get('type') == 'Numeric')
+      #if($dateFmts.contains($item.get('format').replaceAll("[0-9.]", "")))
+         #set($tmp = $dateList.add($item))
+         #set($numDate = $numDate + 1)
+      #else
+         #set($tmp = $numList.add($item))
+         #set($numNum = $numNum + 1)      
+      #end
+   #end
+#end
+
+#foreach($item in $categoryVars)
+   #set($tmp = $charList.add($item))
+   #set($numChar = $numChar + 1)
+#end
+
+#foreach($item in $dateVars)
+   #set($tmp = $dateList.add($item))
+   #set($numDate = $numDate + 1)
+#end
+
+## sort data if by variable specified
+#if($byVar.size() > 0) 
+   proc sort data=$dataset out=_chardata_sorted;
+      by #foreach($item in $byVar) $item #end;
+   run;
+   #set($datatouse = '_chardata_sorted')
+   #else #set($datatouse = $dataset)
+#end
+
+## process categorical variables
+#if (($charList.size() > 0) && ($freqTable=='1' || $freqChart=='1' || $keepMissing=='1' || $limitchk=='1' ))
+/* Analyze categorical variables */
+   #if($freqTable == 1 || $freqChart == 1)
+      title "$catTableTitle";
+      proc freq data=$datatouse;
+      #if ($byVar.size() > 0) by #foreach($item in $byVar) $item #end; #end     
+      #if($freqTable == 0) ods exclude onewayfreqs; #end
+      tables 
+      #foreach($item in $charList) $item #end
+      #if($freqChart == 1 || $keepMissing == 1 || $limit > 0) / 
+         #if($freqChart == 1) plots=(freqplot) #end
+         #if($keepMissing == 1) missing #end
+         #if($limit > 0) maxlevels=$limit #end
+      #end
+      ;
+      run;
+   #end
+#end
+
+## process numeric variables
+#if(($numList.size() > 0) && ($statTable == '1' || $histogram == '1')) 
+/* Analyze numeric variables */
+   #if($statTable == '1')
+      title "$numTableTitle";
+      proc means data=$datatouse n nmiss min mean median max std;
+      #if ($byVar.size() > 0) by #foreach($item in $byVar) $item #end; #end
+         var
+         #foreach($item in $numList) $item #end
+         ;
+      run;
+   #end
+   #if($histogram == 1)
+      title ;
+      proc univariate data=$datatouse noprint;
+      #if ($byVar.size() > 0) by #foreach($item in $byVar) $item #end; #end      
+         histogram #foreach($item in $numList) $item #end;
+      run;
+   #end
+#end
+
+## process date variables
+
+#if($dateList.size() > 0 && ($minMaxDate == '1' || $seriesPlot == '1'))
+/* Analyze date variables */
+   #if($minMaxDate == '1')
+      title "$dateTableTitle";
+      proc sql;
+      #foreach($item in $dateList)
+         #if($dateFmts.contains($item.get('format').replaceAll("[0-9.]", ""))) #set($dtefmt = $item.get('format'))
+         #else #set($dtefmt = 'date.') #end 
+         select "$item" label="Date variable",min($item) format=$dtefmt label="Minimum date" ,max($item)
+         format=$dtefmt label="Maximum date"
+         #if($byVar.size() > 0) , $byVar.get(0) label="$byVar.get(0)" #end
+         from $datatouse
+         #if($byVar.size() >0) group by $byVar.get(0) #end
+         ;
+      #end
+   quit;
+   #end
+
+   #if($seriesPlot == '1')
+      title "$datePlotTitle";
+      proc freq data=$datatouse noprint;
+      #set($inc = 1)
+      #if($byVar.size() > 0) by $byVar.get(0); #end
+      #foreach($item in $dateList)   
+         tables  $item / out=_tmpfreq$inc;
+         #set($inc = $inc + 1)
+      #end
+      run;
+      #set($inc = 1)
+      #foreach($item in $dateList)
+         proc sgplot data=_tmpfreq$inc;
+            #if($byVar.size() > 0) by $byVar.get(0); #end
+            yaxis min=0;
+            series x=$item y=count;
+         run;
+         #set($inc = $inc + 1)
+      #end  
+   #end
+#end
+
+#if($grpVars.size() > 0 || ($dateList.size() > 0 && $seriesPlot == 1) || $byVar.size() > 0)
+/* delete temporary data sets */
+   proc delete data =
+   #if($grpVars.size() > 0) grpvartable #end
+   #if($seriesPlot == 1)
+      #set($inc = 1)
+      #foreach($item in $dateList)   
+         _tmpfreq$inc
+         #set($inc = $inc + 1)
+      #end
+   #end
+   #if($byVar.size() > 0) _chardata_sorted #end
+   ;
+   run;
+#end
+
+]]>
+   </CodeTemplate>
+
+
+<TemplateValues version="3.4">
+<![CDATA[
+{"analysisVars":"json:[{\"value\":\"MRGP\",\"type\":\"Numeric\",\"length\":4,\"format\":\"Z5.\",\"informat\":\"\",\"className\":\"RoleObject\"},{\"value\":\"VALP\",\"type\":\"Numeric\",\"length\":5,\"format\":\"Z9.\",\"informat\":\"\",\"className\":\"RoleObject\"},{\"value\":\"HINCP\",\"type\":\"Numeric\",\"length\":8,\"format\":\"Z9.\",\"informat\":\"\",\"className\":\"RoleObject\"}]","datagrp":"DATA","SASLIBRARY":"CENSUS","categoryVars":"","chargrp":"CATEGORICAL VARIABLES","minMaxDate":"1","dateVars":"","levelsTable":"0","sasOS":"Linux LIN X64 2.6.32-504.23.4.el6.x86_64","numgrp":"NUMERIC VARIABLES","datatab":"DATA","byVar":"","keepMissing":"0","limit":"30","sasVersion":"9.43","rolesgrp":"ROLES","customgrp":"CUSTOM CHARACTERIZATION","dategrp":"DATE VARIABLES","optionstab":"OPTIONS","statTable":"1","datePlotTitle":"Date Frequencies","dataset":"CENSUS.PSAM_H17_SUBSET1","dateTableTitle":"Minimum and Maximum Dates","numTableTitle":"Descriptive Statistics for Numeric Variables","autogrp":"AUTOMATIC CHARACTERIZATION","freqTable":"1","histogram":"1","freqChart":"1","seriesPlot":"0","SASTABLE":"PSAM_H17_SUBSET1","limitchk":"0","catTableTitle":"Frequencies for Categorical Variables"}
+]]>
+</TemplateValues>
+</Task>

@@ -1,0 +1,23 @@
+proc iml;
+use sas.xiongdi;
+read all into mymatrix;
+y=mymatrix;
+print y;
+n=nrow(y);
+p=ncol(y);
+dfchi=p*(p+1)*(p+2)/6;
+q=i(n)-(1/n)*j(n,n,1);
+s=(1/n)*y`*q*y; s_inv=inv(s);
+g_matrix=q*y*s_inv*y`*q;
+beta1hat=(sum(g_matrix#g_matrix#g_matrix))/(n*n);
+beta2hat=trace(g_matrix#g_matrix)/n;
+kappa1=n*beta1hat/6;
+kappa2=(beta2hat-p*(p+2))/sqrt(8*p*(p+2)/n);
+pvalskew=1-probchi(kappa1,dfchi);
+pvalkurt=2*(1-probnorm(abs(kappa2)));
+print s;
+print s_inv;
+print beta1hat kappa1 pvalskew;
+print beta2hat kappa2 pvalkurt;
+quit;
+
